@@ -13,17 +13,35 @@ export class UsersService {
   constructor( private prisma: PrismaService,
   private cloudinaryService: CloudinaryService,) {}
 
+  // async findById(id: string) {
+  //   return this.prisma.user.findUnique({
+  //     where: { id },
+  //     select: {
+  //       id: true,
+  //       email: true,
+  //       role: true,
+  //       createdAt: true,
+  //     },
+  //   });
+  // }
   async findById(id: string) {
-    return this.prisma.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        email: true,
-        role: true,
-        createdAt: true,
-      },
-    });
-  }
+  return this.prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      fullName: true,
+      email: true,
+      phone: true,
+      location: true,
+      bio: true,
+      avatarUrl: true,
+      role: true,
+      isVerified: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+}
 
   async updateUser(id: string, data: any) {
     return this.prisma.user.update({
