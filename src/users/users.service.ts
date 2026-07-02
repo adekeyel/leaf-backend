@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
-
+import { UpdateUserDto } from './dto/update-user.dto';
 @Injectable()
 export class UsersService {
   constructor( private prisma: PrismaService,
@@ -29,34 +29,39 @@ export class UsersService {
     where: { id },
     select: {
       id: true,
-      fullName: true,
-      email: true,
-      phone: true,
-      location: true,
-      bio: true,
-      avatarUrl: true,
-      role: true,
-      isVerified: true,
-      createdAt: true,
-      updatedAt: true,
+  fullName: true,
+  headline: true,
+  email: true,
+  phone: true,
+  location: true,
+  openTo: true,
+  bio: true,
+  avatarUrl: true,
+  role: true,
+  isVerified: true,
+  createdAt: true,
+  updatedAt: true,
     },
   });
 }
 
-  async updateUser(id: string, data: any) {
+  async updateUser(id: string, data: UpdateUserDto) {
     return this.prisma.user.update({
       where: { id },
       data,
       select: {
         id: true,
-        fullName: true,
-        email: true,
-        phone: true,
-        location: true,
-        bio: true,
-        role: true,
-        isVerified: true,
-        updatedAt: true,
+  fullName: true,
+  headline: true,
+  email: true,
+  phone: true,
+  location: true,
+  openTo: true,
+  bio: true,
+  avatarUrl: true,
+  role: true,
+  isVerified: true,
+  updatedAt: true,
       },
     });
     

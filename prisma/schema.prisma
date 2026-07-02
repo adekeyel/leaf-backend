@@ -23,12 +23,13 @@ enum ApplicationStatus {
 model User {
   id       String @id @default(uuid())
   fullName String
+   headline  String?
   email    String @unique
   password String
 
   role       UserRole @default(JOB_SEEKER)
   isVerified Boolean  @default(false)
-
+ openTo    String?
   phone     String?
   location  String?
   bio       String?
