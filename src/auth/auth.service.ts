@@ -50,45 +50,90 @@ export class AuthService {
     };
   }
 
-  // LOGIN (NEW)
-  async login(email: string, password: string) {
-    const user = await this.prisma.user.findUnique({
-      where: { email },
+//   // LOGIN (NEW)
+//   async login(email: string, password: string) {
+//     const user = await this.prisma.user.findUnique({
+//       where: { email },
       
-    });
+//     });
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+//     if (!user) {
+//       throw new UnauthorizedException('Invalid credentials');
+//     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+//     const passwordMatch = await bcrypt.compare(password, user.password);
 
-    if (!passwordMatch) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-console.log('User found:', user?.email);
+//     if (!passwordMatch) {
+//       throw new UnauthorizedException('Invalid credentials');
+//     }
+// console.log('User found:', user?.email);
 
-console.log('Password match:', passwordMatch);
+// console.log('Password match:', passwordMatch);
 
-    const tokens = await this.generateTokens(user);
+//     const tokens = await this.generateTokens(user);
 
-await this.updateRefreshToken(
-  user.id,
-   tokens.refreshToken,
- );
+// await this.updateRefreshToken(
+//   user.id,
+//    tokens.refreshToken,
+//  );
 
-return {
-  message: 'Login successful',
-  ...tokens,
-  user: {
-    id: user.id,
-    fullName: user.fullName,
-    email: user.email,
-    role: user.role,
-  },
-};
+// return {
+//   message: 'Login successful',
+//   ...tokens,
+//   user: {
+//     id: user.id,
+//     fullName: user.fullName,
+//     email: user.email,
+//     role: user.role,
+//   },
+// };
     
+//   }
+async login(email: string, password: string) {
+  console.log('LOGIN ATTEMPT:', email);
+
+  const user = await this.prisma.user.findUnique({
+    where: { email },
+  });
+
+  console.log('USER FOUND:', !!user);
+
+  if (!user) {
+    throw new UnauthorizedException('Invalid credentials');
   }
+
+  console.log('HASH IN DB:', user.password);
+
+  const passwordMatch = await bcrypt.compare(
+    password,
+    user.password,
+  );
+
+  console.log('PASSWORD MATCH:', passwordMatch);
+
+  if (!passwordMatch) {
+    throw new UnauthorizedException('Invalid credentials');
+  }
+
+  const tokens = await this.generateTokens(user);
+
+  await this.updateRefreshToken(
+    user.id,
+    tokens.refreshToken,
+  );
+
+  return {
+    message: 'Login successful',
+    ...tokens,
+    user: {
+      id: user.id,
+      fullName: user.fullName,
+      email: user.email,
+      role: user.role,
+    },
+  };
+}
+
  private async generateTokens(user: any) {
   console.log('JWT_SECRET =', process.env.JWT_SECRET);
 
